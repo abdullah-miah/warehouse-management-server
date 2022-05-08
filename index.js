@@ -34,6 +34,13 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
      }
      res.send({success: true, data: products})
         })
+        app.get('/management/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await productCollection.findOne(query);
+            res.send(result);
+        });
+
         // delete Api
         app.delete('/management/:id', async (req, res)=>{
             const id = req.params.id;
