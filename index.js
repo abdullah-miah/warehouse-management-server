@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 const app = express();
@@ -26,13 +26,21 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
          res.send({success: true, message: `Successfuly Inserted ${product.name}`})
      })
 
-     app.get('/', async(req, res)=>{
+     app.get('/management', async(req, res)=>{
          const cursor = productCollection.find();
          const products = await cursor.toArray();
      if(!products?.length){
          return res.send({success: false, error: "No data found" })
      }
      res.send({success: true, data: products})
+        })
+        // delete Api
+        app.delete('/management/:id', async (req, res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await productCollection.deleteOne(query);
+            res.send(result);
+
         })
      }
      catch(error){
