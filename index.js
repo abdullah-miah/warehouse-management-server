@@ -16,7 +16,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
      try{
       await client.connect();
      const productCollection = client.db('smartHub').collection('product');
-
+//    products
      app.post('/products', async (req, res)=>{
          const product = req.body;
          if(!product.name || !product.price){
