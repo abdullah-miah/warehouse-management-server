@@ -53,6 +53,25 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
         };
         const result = await productCollection.updateOne(filter, udatedDoc, options)
     } )
+    app.get('/updatedProducts/:id', async(req, res) =>{
+        const id = req.params.id;
+        const query = {_id: ObjectId(id)};
+        const result = await productCollection.findOne(query);
+        res.send(result);
+    });
+    app.put('/updatedProducts/:id', async (req, res)=>{
+        const id = req.params.id;
+        const updatedProduct = req.body;
+        const filter ={_id: ObjectId(id)};
+        const options = { upsert: true}
+        const udatedDoc ={
+            $set:{
+                price: updatedProduct.price,
+                quantity: updatedProduct.quantity,
+            }
+        };
+        const result = await productCollection.updateOne(filter, udatedDoc, options)
+    } )
 
         // delete Api
         app.delete('/management/:id', async (req, res)=>{
